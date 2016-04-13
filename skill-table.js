@@ -1,13 +1,10 @@
 var langData = [
   'HTML+CSS:skilled',
   'JavaScript:skilled',
-  'Markdown:skilled',
   'Java:practiced',
-  'Python:practiced',
-  'Batch:practiced',
+  'Windows Batch:practiced',
   'Perl:learning',
   'Kotlin:learning',
-  'MongoDB:learning',
   'PowerShell:learning'
 ];
 var techData = [
@@ -16,7 +13,7 @@ var techData = [
   'Vue.js:practiced',
   'React.js:practiced',
   'Raphael.js:practiced',
-  'Spring:learning'
+  'Spring:practiced'
 ];
 var toolData = [
   'Sublime Text:skilled',
@@ -34,7 +31,7 @@ function _(code) {
   }
 }
 
-function renderTbody(data) {
+function makeTbody(data) {
   var tbody = document.createElement('tbody'), tr, th, td, rec;
   for (var i = data.length - 1; i >= 0; i--) {
     rec = data[i].split(':');
@@ -45,5 +42,14 @@ function renderTbody(data) {
     td.textContent = _(rec[1]);
     tr.insertAdjacentElement('afterBegin', th);
   }
-  document.querySelector('#skill table').insertAdjacentElement('beforeEnd', tbody);
+  return tbody;
+}
+
+function makeSkillTable() {
+  var table = document.createElement('table');
+  table.createCaption().textContent = 'Skill';
+  table.insertAdjacentElement('beforeEnd', makeTbody(langData));
+  table.insertAdjacentElement('beforeEnd', makeTbody(techData));
+  table.insertAdjacentElement('beforeEnd', makeTbody(toolData));
+  return table;
 }

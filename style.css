@@ -13,20 +13,22 @@ header {text-align: right; margin-bottom: 1em;}
 header h1 {font-size: 2em;}
 header h2 {font-size: 1.2em; margin-top: 0.5em;}
 
-section {box-sizing: border-box;}
-section h3 {border-left: 0.25em solid #000; padding-left: 0.75em; line-height: 1; font-size: 1em; margin: 2em 0 1em;}
+section {box-sizing: border-box; color: #333;}
+section h3 {border-left: 0.25em solid #8f43e8; color: #8f43e8; padding-left: 0.75em; line-height: 1; font-size: 1em; margin: 2em 0 1em;}
 section:first-child h3 {margin-top: 0;}
-section h4 {padding-left: 1em; font-size: 1em; font-weight: 300; font-style: oblique;}
+section h4 {padding-left: 1em; font-size: 1em; font-weight: normal; font-style: oblique; color: #000;}
 section p {padding-left: 1em;}
-section table {border-collapse: collapse; margin: 0 auto;}
-section table th, section table td {padding: 0.1em 1em;}
-section table th {text-align: left; font-style: oblique;}
-section thead {border-bottom: 2px solid #000;}
-section tbody + tbody {border-top: 1px solid #444;}
-section tbody tr:hover {background: #eee;}
 
-section#basicinfo {margin: 0; text-align: right; font-size: 0.8em;}
+section#basicinfo {margin: 0; text-align: right; font-size: 0.8em; color: #000;}
 section#basicinfo dl {margin: 0;}
-section#basicinfo dt {color: #757575;}
+section#basicinfo dt, section#basicinfo caption {color: #757575;}
 section#basicinfo dd {margin-bottom: 1em;}
 section#basicinfo .remark {color: #aaa;}
+section#basicinfo table {border-collapse: collapse; margin: 0 0 0 auto; position: relative; right: -0.5em;}
+section#basicinfo caption {border-bottom: 1px solid #757575; text-align: right; padding-right: 0.5em;}
+section#basicinfo tbody + tbody {border-top: 1px solid #ccc;}
+section#basicinfo tbody tr:hover {background: #eee;}
+section#basicinfo th, section#basicinfo td {padding: 0.1em 0.5em;}
+section#basicinfo td {padding-left: 0;}
+section#basicinfo th {text-align: left;}
+section#basicinfo td {text-align: right;}
