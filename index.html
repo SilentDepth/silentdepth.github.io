@@ -12,7 +12,7 @@
 <div id="paper">
 <header>
   <h1>黄威</h1>
-  <h2>男·1989年生</h2>
+  <h2>男·1989年生<span id="age" class="remark"></span></h2>
 </header>
 <div class="con">
 <div class="left">
@@ -46,6 +46,7 @@
     <p>为了让客户了解 Aster（Teradata 的一个面向数据分析的数据库产品）的优势和价值，以银行选址辅助分析为主题启动的一个概念验证项目。我独自完成了演示程序（Web 应用）的设计和开发，以热图的形式基于百度地图实现了分析数据的可视化展示，并参加了某银行的大数据成果展览。</p>
     <h4>某 ETL 调度工具 (2013)</h4>
     <p>实习时参与的项目，主要负责部分功能的业务逻辑实现和 SQL 编写，以及界面设计和测试工作。</p>
+    <p class="remark">＊ 以上项目因保密协议要求恕不能提供演示或截图。</p>
   </section>
   <section id="skill">
     <h3>技术经历</h3>
@@ -71,8 +72,6 @@
       <dd>普通话、英文</dd>
       <dt>College</dt>
       <dd>天津理工大学中环信息学院<br>电子信息科学与技术<br>2009-2013</dd>
-      <dt>Hobby</dt>
-      <dd>音乐、动漫、阅读</dd>
       <dt>Tags</dt>
       <dd>视觉控、简洁控、果粉</dd>
     </dl>
@@ -82,4 +81,9 @@
 </div>
 <script>
   document.querySelector('#basicinfo').insertAdjacentElement('beforeEnd', makeSkillTable());
+  // Calc my age
+  var ageSpanTmpl = '({{age}}岁)';
+  var agePlaceholder = '{{age}}';
+  var age = (new Date()).getFullYear() - 1989;
+  document.querySelector('#age').textContent = ageSpanTmpl.replace(agePlaceholder, age);
 </script>
