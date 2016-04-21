@@ -9,6 +9,8 @@
 <title>SilentDepth's Resume</title>
 <link rel="stylesheet" href="style.css">
 <script src="skill-table.js"></script>
+<script src="animation.js"></script>
+<canvas id="bg"></canvas>
 <div id="paper">
 <header>
   <h1>黄威</h1>
@@ -86,4 +88,15 @@
   var agePlaceholder = '{{age}}';
   var age = (new Date()).getFullYear() - 1989;
   document.querySelector('#age').textContent = ageSpanTmpl.replace(agePlaceholder, age);
+  // Animate the background
+  var bg = document.querySelector('canvas#bg');
+  var c = bg.getContext('2d');
+  bg.width = document.body.getClientRects()[0].width;
+  bg.height = TILE_SIZE * TILE_ROWS;
+  for (var i = 0, j; i < bg.width / TILE_SIZE; i++) {
+    for (j = 0; j < TILE_ROWS; j++) {
+      tiles.push(new Tile(i, j));
+    }
+  }
+  window.requestAnimationFrame(animate);
 </script>

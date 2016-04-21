@@ -5,7 +5,9 @@ h1, h2, h3, h4 {line-height: 1; margin: 0; padding: 0;}
 .code {font-family: 'Source Code Pro', 'Consolas', 'Menlo', monospace;}
 .remark {color: #aaa;}
 
-#paper {box-sizing: border-box; width: 210mm; padding: 10mm; margin: 30px auto 0; background: #fff; box-shadow: 0 8px 22px #545454; font-size: 12pt; font-family: 'PingFang SC', 'Microsoft YaHei Light', 'Segoe UI Light', sans-serif;}
+#bg {position: absolute; top: 0; left: 0; z-index: 0;}
+
+#paper {box-sizing: border-box; width: 210mm; padding: 10mm; margin: 30px auto 0; background: #fff; box-shadow: 0 8px 22px #545454; font-size: 12pt; font-family: 'PingFang SC', 'Microsoft YaHei Light', 'Segoe UI Light', sans-serif; position: relative; z-index: 99;}
 #paper > .con {display: flex;}
 #paper > .con > .right {flex: 1 0 33%;}
 
