@@ -3,11 +3,15 @@
 <link rel="stylesheet" href="reveal.js/css/theme/league.css">
 <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
 <style>
-  .title-em {
+  .em-yellow {
     color: #EAD53F;
   }
   .no-include {
-    opacity: .2;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  .no-include.current-fragment {
+    opacity: .2 !important;
   }
   .double-list {
     width: 100%;
@@ -34,10 +38,10 @@
 
     <section>
       <section>
-        <h1>ECMAScript <span class="title-em">2015</span> (<span class="title-em">ES6</span>)</h1>
-        <h3>New Feature Tutorial</h3>
+        <h1>ECMAScript <span class="em-yellow">2015</span> (<span class="em-yellow">ES6</span>)</h1>
+        <h3>New feature Glance</h3>
       </section>
-      <section data-transition="slide-in fade-out">
+      <section class="es6" data-transition="slide-in fade-out">
         <h3>ES6 Feature List</h3>
         <div class="double-list">
           <ul>
@@ -50,139 +54,162 @@
             <li>Let + Const</li>
             <li>Iterators + For...of</li>
             <li>Generators</li>
-            <li>Unicode</li>
+            <li class="fragment no-include" data-fragment-index="0">Unicode</li>
           </ul><ul>
-            <li>Modules &amp; module loaders</li>
+            <li class="fragment no-include" data-fragment-index="0">Modules &amp; module loaders</li>
             <li>Map + Set + WeakMap + WeakSet</li>
-            <li>Proxies</li>
+            <li>Proxy</li>
             <li>Symbols</li>
-            <li>Subclassable built-ins</li>
+            <li class="fragment no-include" data-fragment-index="0">Subclassable built-ins</li>
             <li>Promises</li>
-            <li>Math + Number + String + Array + Object APIs</li>
-            <li>Binary and octal literals</li>
+            <li class="fragment no-include" data-fragment-index="0">Math + Number + String + Array + Object APIs</li>
+            <li class="fragment no-include" data-fragment-index="0">Binary and octal literals</li>
             <li>Reflect API</li>
-            <li>Tail calls</li>
-          </ul>
-        </div>
-      </section>
-      <section data-transition="fade-in slide-out">
-        <h3>ES6 Feature List</h3>
-        <div class="double-list">
-          <ul>
-            <li>Arrows</li>
-            <li>Classes</li>
-            <li>Enhanced object literals</li>
-            <li>Template strings</li>
-            <li>Destructuring</li>
-            <li>Default + rest + spread</li>
-            <li>Let + Const</li>
-            <li>Iterators + For...of</li>
-            <li>Generators</li>
-            <li class="no-include">Unicode</li>
-          </ul><ul>
-            <li class="no-include">Modules &amp; module loaders</li>
-            <li>Map + Set + WeakMap + WeakSet</li>
-            <li>Proxies</li>
-            <li>Symbols</li>
-            <li class="no-include">Subclassable built-ins</li>
-            <li>Promise</li>
-            <li class="no-include">Math + Number + String + Array + Object APIs</li>
-            <li class="no-include">Binary and octal literals</li>
-            <li>Reflect API</li>
-            <li class="no-include">Tail calls</li>
+            <li class="fragment no-include" data-fragment-index="0">Tail calls</li>
           </ul>
         </div>
       </section>
     </section>
     <section>
+      <h2>Enhanced Object Literals <span class="chn">对象简写</span></h2>
+      <pre><code class="javascript" data-trim>
+        var prop;
+        var handler;
+        var obj = {
+
+          // 关键字 __proto__ 指定原型对象
+          __proto__: theProtoObj,
+
+          // 与变量同名属性/方法的简略写法
+          prop, // prop: prop
+          handler, // handler: handler
+
+          // 方法的简略写法
+          toString() {
+            // 关键字 super 引用父级对象
+            return "d " + super.toString();
+          },
+
+          // 计算属性名 (Computed/Dynamic Property Names)
+          [ 'prop_' + (() => 42)() ]: 42
+
+        };
+      </code></pre>
+    </section>
+    <section>
       <h2>Destructuring <span class="chn">解构</span></h2>
       <pre><code class="javascript" data-trim>
-        // list matching
+        // 数组匹配
         var [a, , b] = [1, 2, 3];
 
-        // object matching
+        // 对象匹配
         var {op: a, lhs: {op: b}, rhs: c} = getASTNode()
-
-        // object matching shorthand
-        // binds `op`, `lhs` and `rhs` in scope
+        // 当变量名与属性名相同时可以简写
         var {op, lhs, rhs} = getASTNode()
 
-        // Can be used in parameter position
+        // 用于函数参数
         function g({name: x}) {
           console.log(x);
         }
         g({name: 5})
 
-        // Fail-soft destructuring
+        // 空匹配保险
         var [a] = []; // a === undefined
-
-        // Fail-soft destructuring with defaults
+        // 还可以设定默认值
         var [a = 1] = []; // a === 1
       </code></pre>
     </section>
     <section>
-      <h2>Enhanced Object Literals <span class="chn">对象简写</span></h2>
-      <pre><code class="javascript" data-trim>
-        var obj = {
-          // __proto__
-          __proto__: theProtoObj,
-          // Shorthand for 'handler: handler'
-          handler,
-          // Methods
-          toString() {
-           // Super calls
-           return "d " + super.toString();
-          },
-          // Computed (dynamic) property names
-          [ 'prop_' + (() => 42)() ]: 42
-        };
+      <section>
+        <h2>Default + Rest + Spread</h2>
+        <pre><code class="javascript" data-trim>
+        // Default
+        function f(x, y = 12) {
+          // 未提供 y 参数（或提供值为 undefined）时以默认值12参与计算
+          return x + y;
+        }
+        f(3) // 15
+
+        // Rest
+        function f(x, ...y) {
+          // y 此时为一个数组
+          return x * y.length;
+        }
+        f(3, "hello", true) // 6
+
+        // Spread
+        function f(x, y, z) {
+          return x + y + z;
+        }
+        // 将数组元素分别传递为各个参数
+        f(...[1, 2, 3]) // 6
       </code></pre>
+      </section>
+      <section>
+        <h3>Object Rest/Spread Properties</h3>
+        <h6>(Stage 2)</h6>
+        <pre><code class="javascript" data-trim>
+          var {x, ...rest} = {x: 1, y: 2, a: 3, b: 4};
+          console.log(x) // 1
+          console.log(rest) // {y: 2, a: 3, b: 4}
+
+          // 对象合并
+          var obj1 = {x: 1, y: 2};
+          var obj2 = {a: 3, b: 4};
+          console.log({...obj1, ...obj2}) // {x: 1, y: 2, a: 3, b: 4}
+
+          // 对象复制
+          var obj = {x: 1, y: 2, a: 3, b: 4};
+          var {...objClone} = obj;
+          console.log(objClone) // {x: 1, y: 2, a: 3, b: 4}
+        </code></pre>
+      </section>
     </section>
     <section>
       <h2>Arrow Function <span class="chn">箭头函数</span></h2>
       <pre><code class="javascript" data-trim>
-        // Expression bodies
+        // 表达式函数体（自动返回该表达式的值）
         var odds = evens.map(v => v + 1);
         var nums = evens.map((v, i) => v + i);
         var pairs = evens.map(v => ({even: v, odd: v + 1}));
 
-        // Statement bodies
+        // 语句函数体
         nums.forEach(v => {
           if (v % 5 === 0)
             fives.push(v);
         });
 
-        // Lexical this
+        // 字面层 (Lexical) this
         var bob = {
-          _name: "Bob",
+          _name: 'Bob',
           _friends: [],
           printFriends() {
             this._friends.forEach(f =>
-              console.log(this._name + " knows " + f));
+              console.log(this._name + ' knows ' + f));
           }
         }
       </code></pre>
     </section>
     <section>
-      <h2>Default + Rest + Spread</h2>
+      <h2>Template Strings <span class="chn">模板字符串</span></h2>
       <pre><code class="javascript" data-trim>
-        function f(x, y=12) {
-          // y is 12 if not passed (or passed as undefined)
-          return x + y;
-        }
-        f(3) == 15
+        `In JavaScript '\n' is a line-feed.`
 
-        function f(x, ...y) {
-          // y is an Array
-          return x * y.length;
-        }
-        f(3, "hello", true) == 6
+        // 多行文本
+        `In JavaScript this is
+         not legal.`
 
-        function f(x, y, z) {
-          return x + y + z;
-        }
-        // Pass each elem of array as argument
-        f(...[1,2,3]) == 6
+        // 插值
+        var name = 'Bob', time = 'today';
+        `Hello ${name}, how are you ${time}?`
+
+        // 标签 (Tagged) 模板字符串
+        function POST(strings, ...keys) { /* ... */ }
+        POST`http://foo.org/bar?a=${a}&b=${b}
+             Content-Type: application/json
+             X-Credentials: ${credentials}
+             {"foo": ${foo},
+              "bar": ${bar}}`(myOnReadyStateChangeHandler);
       </code></pre>
     </section>
     <section>
@@ -214,117 +241,90 @@
       </code></pre>
     </section>
     <section>
-      <h2>Template Strings <span class="chn">模板字符串</span></h2>
-      <pre><code class="javascript" data-trim>
-        // Basic literal string creation
-        `In JavaScript '\n' is a line-feed.`
-        
-        // Multiline strings
-        `In JavaScript this is
-         not legal.`
-        
-        // String interpolation
-        var name = "Bob", time = "today";
-        `Hello ${name}, how are you ${time}?`
-        
-        // Construct an HTTP request prefix is used to interpret the replacements and construction
-        POST`http://foo.org/bar?a=${a}&b=${b}
-             Content-Type: application/json
-             X-Credentials: ${credentials}
-             { "foo": ${foo},
-               "bar": ${bar}}`(myOnReadyStateChangeHandler);        
-      </code></pre>
-    </section>
-    <section>
       <h2>Let + Const</h2>
       <pre><code class="javascript" data-trim>
         function f() {
           {
             let x;
             {
-              // okay, block scoped name
-              const x = "sneaky";
-              // error, const
-              x = "foo";
+              const x = "sneaky"; // 没问题，本块内有效
+              x = "foo"; // 错误，x 被声明为 const
             }
-            // error, already declared in block
-            let x = "inner";
+            let x = "inner"; // 错误，同块中已被声明
           }
         }
       </code></pre>
-    </section>
-    <section>
-      <h2>Symbols</h2>
-      <h6>(Babel: Partial Support)</h6>
-      <pre><code class="javascript" data-trim>
-        var MyClass = (function() {
-
-          // module scoped symbol
-          var key = Symbol("key");
-
-          function MyClass(privateData) {
-            this[key] = privateData;
-          }
-
-          MyClass.prototype = {
-            doStuff: function() {
-              ... this[key] ...
-            }
-          };
-
-          return MyClass;
-        })();
-
-        var c = new MyClass("hello")
-        c["key"] === undefined
-      </code></pre>
+      <p>/* No more <code>var</code> */</p>
     </section>
     <section>
       <h2>Map + Set + WeakMap + WeakSet</h2>
       <pre><code class="javascript" data-trim>
-        // Sets
-        var s = new Set();
+        // Set
+        let s = new Set();
         s.add("hello").add("goodbye").add("hello");
-        s.size === 2;
-        s.has("hello") === true;
+        s.has("hello") // true
+        console.log(s.size) // 2
 
-        // Maps
-        var m = new Map();
+        // Map
+        let m = new Map();
         m.set("hello", 42);
         m.set(s, 34);
-        m.get(s) == 34;
+        m.get(s) // 34
 
-        // Weak Maps
-        var wm = new WeakMap();
-        wm.set(s, { extra: 42 });
-        wm.size === undefined
+        // WeakMap
+        let wm = new WeakMap();
+        wm.set(s, {extra: 42});
+        console.log(wm.size) // undefined
 
-        // Weak Sets
-        var ws = new WeakSet();
-        ws.add({ data: 42 });
-        // Because the added object has no other references, it will not be held in the set
+        // WeakSet
+        let ws = new WeakSet();
+        ws.add({data: 42});
+        // 由于添加的对象没有其他引用，该对象随时会被清除
       </code></pre>
     </section>
     <section>
-      <h2>Promise</h2>
-      <pre><code class="javascript" data-trim>
-        function timeout(duration = 0) {
-            return new Promise((resolve, reject) => {
-                setTimeout(resolve, duration);
-            })
-        }
+      <section>
+        <h2>Symbol</h2>
+        <h6>(Babel: Partial Support)</h6>
+        <pre><code class="javascript" data-trim>
+          let sym1 = Symbol();
+          let sym2 = Symbol('foo');
+          let sym3 = Symbol('foo');
+          console.log(sym2 == sym3) // false
+          console.log(sym3.toString()) // Symbol(foo)
 
-        var p = timeout(1000).then(() => {
-            return timeout(2000);
-        }).then(() => {
-            throw new Error("hmm");
-        }).catch(err => {
-            return Promise.all([timeout(100), timeout(200)]);
-        })
-      </code></pre>
+          // 全局 Symbol 注册表
+          let sym4 = Symbol.for('foo');
+          console.log(sym4 === Symbol.for('foo')) // true
+          console.log(Symbol.keyFor(sym4)) // foo
+        </code></pre>
+      </section>
+      <section>
+        <h3>Private Emulation In Class <span class="chn">模拟私有成员</span></h3>
+        <pre><code class="javascript" data-trim>
+          let MyClass = (function() {
+            let key = Symbol("key");
+
+            function MyClass(privateData) {
+              this[key] = privateData;
+            }
+
+            MyClass.prototype = {
+              doStuff: function() {
+                ... this[key] ...
+              }
+            };
+
+            return MyClass;
+          }());
+
+          let c = new MyClass("hello")
+          console.log(c["key"]) // undefined
+        </code></pre>
+      </section>
     </section>
     <section>
-      <h2>Iterators + For...Of</h2>
+      <h2>Iterator + For...Of</h2>
       <pre><code class="javascript" data-trim>
         let fibonacci = {
           [Symbol.iterator]() {
@@ -338,22 +338,39 @@
           }
         }
 
-        for (var n of fibonacci) {
-          // truncate the sequence at 1000
-          if (n > 1000)
+        for (let n of fibonacci) {
+          if (n > 1000) // 设定上限
             break;
           console.log(n);
         }
       </code></pre>
     </section>
     <section>
-      <h2>Generators</h2>
+      <h2>Promise</h2>
+      <pre><code class="javascript" data-trim>
+        function timeout(duration = 0) {
+          return new Promise((resolve, reject) => {
+            setTimeout(resolve, duration);
+          });
+        }
+
+        let p = timeout(1000).then(() => {
+          return timeout(2000);
+        }).then(() => {
+          throw new Error("hmm");
+        }).catch(err => {
+          return Promise.all([timeout(100), timeout(200)]);
+        });
+      </code></pre>
+    </section>
+    <section>
+      <h2>Generators <span class="chn">生成器</span></h2>
       <pre><code class="javascript" data-trim>
         var fibonacci = {
           [Symbol.iterator]: function*() {
-            var pre = 0, cur = 1;
+            let pre = 0, cur = 1;
             for (;;) {
-              var temp = pre;
+              let temp = pre;
               pre = cur;
               cur += temp;
               yield cur;
@@ -361,42 +378,41 @@
           }
         }
 
-        for (var n of fibonacci) {
-          // truncate the sequence at 1000
-          if (n > 1000)
+        for (let n of fibonacci) {
+          if (n > 1000) // 设定上限
             break;
           console.log(n);
         }
       </code></pre>
     </section>
     <section>
-      <h2>Proxies</h2>
+      <h2>Proxy</h2>
       <h6>(Babel: No Support)</h6>
       <pre><code class="javascript" data-trim>
-        // Proxying a normal object
-        var target = {};
-        var handler = {
+        // 代理一个对象
+        let target = {};
+        let handler = {
           get: function (receiver, name) {
             return `Hello, ${name}!`;
           }
         };
 
-        var p = new Proxy(target, handler);
-        p.world === 'Hello, world!';
+        let p = new Proxy(target, handler);
+        console.log(p.world) // 'Hello, world!'
 
-        // Proxying a function object
-        var target = function () { return 'I am the target'; };
-        var handler = {
+        // 代理一个函数
+        let target = function () { return 'I am the target'; };
+        let handler = {
           apply: function (receiver, ...args) {
             return 'I am the proxy';
           }
         };
 
-        var p = new Proxy(target, handler);
-        p() === 'I am the proxy';
+        let p = new Proxy(target, handler);
+        p() // 'I am the proxy'
       </code></pre>
     </section>
-    <section>
+    <section data-transition="slide-in fade-out">
       <h2>Reflect API</h2>
       <pre><code class="javascript" data-trim>
         // No example
@@ -406,99 +422,122 @@
     <!-- ES7 -->
 
     <section>
-      <section>
-        <h2>ECMAScript <span class="title-em">2016</span> (<span class="title-em">ES7</span>)</h2>
-        <h3>New Feature Tutorial</h3>
+      <section data-transition="fade" data-background-color="#000" data-autoslide="1000"></section>
+      <section data-transition="fade-in slide-out">
+        <h1>ECMAScript <span class="em-yellow">2016</span> (<span class="em-yellow">ES7</span>)</h1>
+        <h3>New feature Glance</h3>
       </section>
       <section>
         <h3>ES7 Feature List</h3>
         <ul>
-          <li><code>Array.prototype.includes</code></li>
+          <li>Array.prototype.includes()</li>
           <li>Exponentiation Operator</li>
         </ul>
       </section>
     </section>
     <section>
-      <h2><code>Array.prototype.includes</code></h2>
+      <h2>Array.prototype.includes()</h2>
       <pre><code class="javascript" data-trim>
         ['a', 'b', 'c'].includes('a') // true
         ['a', 'b', 'c'].includes('d') // false
 
-        // Following expressions are mostly equivalent
+        // 通常情况下这两个表达式相同
         arr.includes(x)
         arr.indexOf(x) >= 0
 
-        // But `includes()` finds `NaN`
+        // 但 includes() 可以正确处理 NaN
         [NaN].includes(NaN) // true
         [NaN].indexOf(NaN) // -1
       </code></pre>
     </section>
-    <section>
-      <h2>Exponentiation Operator</h2>
+    <section data-transition="slide-in fade-out">
+      <h2>Exponentiation Operator <span class="chn">指数操作符</span></h2>
       <pre><code class="javascript" data-trim>
-        // Following expressions are equivalent
+        // 以下两句相同
         x ** y
         Math.pow(x, y)
 
-        // More examples
-        let squared = 3 ** 2; // 9
+        let squared = 3 ** 2;
+        console.log(squared) // 9
 
         let num = 3;
         num **= 2;
-        console.log(num); // 9
+        console.log(num) // 9
       </code></pre>
     </section>
 
     <!-- ES8 -->
 
     <section>
-      <section>
-        <h2>ECMAScript <span class="title-em">2017</span> (<span class="title-em">ES8</span>)</h2>
-        <h3>New Feature Tutorial</h3>
+      <section data-transition="fade" data-background-color="#000" data-autoslide="1000"></section>
+      <section data-transition="fade-in slide-out">
+        <h1>ECMAScript <span class="em-yellow">2017</span> (<span class="em-yellow">ES8</span>)</h1>
+        <h3>New Feature Glance</h3>
       </section>
       <section>
         <h3>ES8 Feature List</h3>
         <ul>
-          <li>Async Functions (Finally!)</li>
-          <li>Shared memory and atomics</li>
-          <li>Object.values/Object.entries</li>
-          <li>String padding</li>
-          <li>Object.getOwnPropertyDescriptors()</li>
           <li>Trailing commas in function parameter lists and calls</li>
+          <li>Object.values() &amp; Object.entries()</li>
+          <li>Object.getOwnPropertyDescriptors()</li>
+          <li>String padding</li>
+          <li>Async Functions <span class="fragment em-yellow">(Finally!)</span></li>
         </ul>
       </section>
     </section>
     <section>
-      <h2>Async Functions</h2>
-      <pre><code class="javascript" data-trim>
-        // Promise
-        function fetchJson(url) {
-          return fetch(url)
-            .then(request => request.text())
-            .then(text => {
-              return JSON.parse(text);
-            })
-            .catch(error => {
-              console.log(`ERROR: ${error.stack}`);
-            });
-        }
-        fetchJson('http://example.com/some_file.json').then(obj => console.log(obj));
+      <section>
+        <h2>Trailing Commas <span class="chn">尾逗号</span></h2>
+        <pre><code class="javascript" data-trim>
+          // 数组字面量的尾逗号会被忽略
+          [1, 2, 3,]
 
-        // Async function
-        async function fetchJson(url) {
-          try {
-            let request = await fetch(url);
-            let text = await request.text();
-            return JSON.parse(text);
-          }
-          catch (error) {
-            console.log(`ERROR: ${error.stack}`);
-          }
-        }
+          // ES5 开始对象字面量的尾逗号也会被忽略了
+          {a: 1, b: 2, c: 3,}
+
+          // 现在轮到了函数参数列
+          function foo(para1, para2,) {}
+          foo(p1, p2,)
+        </code></pre>
+      </section>
+      <section data-transition="slide-in fade-out">
+        <h3>Why this?</h3>
+        <p>以前当你做出这样的修改后……</p>
+        <pre><code class="javascript" data-trim>
+          /* before */        /* after */
+          1 | [               1 | [
+          2 |   'one',        2 |   'one',
+          3 |   'two'         3 |   'two',
+          4 | ]               4 |   'three'
+                              5 | ]
+        </code></pre>
+        <p class="fragment" data-fragment-index="0">……你会得到这样的 diff 日志</p>
+        <pre class="fragment" data-fragment-index="0"><code class="javascript" data-trim>
+          -3 |   'two'  // 这两行其实
+          +3 |   'two', // 毫无意义
+          +4 |   'three'
+        </code></pre>
+      </section>
+    </section>
+    <section>
+      <h2>Object.values() & Object.entries()</h2>
+      <pre><code class="javascript" data-trim>
+        // Object.values()
+        let obj1 = {a: 'foo', b: 42};
+        console.log(Object.values(obj1)) // ['foo', 42]
+
+        // 忽略非自有、不可枚举属性
+        let obj2 = Object.create({a: 'foo'}, {b: {value: 'bar'}});
+        obj2.c = 42;
+        console.log(Object.values(obj2)) // [42]
+
+        // Object.entries()
+        console.log(Object.entries(obj1)) // [['a', 'foo'], ['b', 42]]
+        console.log(Object.entries(obj2)) // [['c', 42]]
       </code></pre>
     </section>
     <section>
-      <h2>String Padding</h2>
+      <h2>String Padding <span class="chn">字符串补丁</span></h2>
       <pre><code class="javascript" data-trim>
         'x'.padStart(5, 'ab') // 'ababx'
         'x'.padStart(4, 'ab') // 'abax'
@@ -515,34 +554,54 @@
     </section>
     <section>
       <section>
-        <h2>Trailing Commas</h2>
-        <h6>In Function Parameter Lists And Calls</h6>
+        <h2>Async Functions <span class="chn">异步函数</span></h2>
         <pre><code class="javascript" data-trim>
-          // Trailing comma in array literals are ignored
-          [1, 2, 3,]
-
-          // ...as well as in object literals (ES5)
-          {a: 1, b: 2, c: 3,}
-
-          // ...and now in function parameter lists and calls (ES8)
-          function foo(para1, para2,) {}
-          foo(p1, p2,)
+          async function () {
+            await ...
+          }
         </code></pre>
       </section>
       <section>
-        <h3>Why this?</h3>
+        <h3>Promise</h3>
         <pre><code class="javascript" data-trim>
-          // When appending an element in old days...
-          [                               [
-            'one',                          'one',
-            'two'     /* change to */       'two',
-          ]                                 'three'
-                                          ]
-
-          // ...a diff log like this comes out
-          -3 | 'two'  // these 2 lines are actually meaning-less
-          +3 | 'two', //
-          +4 | 'three'
+          function addUser(username, age) {
+            return new Promise((resolve, reject) => {
+              // 检查用户名，成功则调用 resolve，失败则调用 reject
+              // 异步返回用户编号: resolve(userid)
+              checkUsername(username, resolve, reject);
+            }).then(userid => {
+              // 显示 Loading 动画
+              spinning(`Your ID is ${userid}`);
+              // 添加用户信息，成功则调用 resolve，失败则调用 reject
+              return new Promise((resolve, reject) => {
+                addUserInfo(username, age, resolve, reject);
+              });
+            }).then(() => {
+              alert('Your account has been created successfully');
+              location.reload();
+            }).catch(err => {
+              alert(err);
+            });
+          }
+        </code></pre>
+      </section>
+      <section>
+        <h3>async</h3>
+        <pre><code class="javascript" data-trim>
+          async function addUser(username, age) {
+            try {
+              // 检查用户名
+              let userid = await checkUsername(username);
+              // 显示 Loading 动画
+              spinning(`Your ID is ${userid}`);
+              // 添加用户信息
+              await addUserInfo(username, age);
+              alert('Your account has been created successfully');
+              location.reload();
+            } catch (err) {
+              alert(err);
+            }
+          }
         </code></pre>
       </section>
     </section>
@@ -550,9 +609,12 @@
     <!-- End -->
 
     <section>
-      <h2>Thanks</h2>
-      <h6>and</h6>
-      <h2>Q&A</h2>
+      <section data-transition="fade" data-background-color="#000" data-autoslide="1000"></section>
+      <section data-transition="fade">
+        <h1>Q&A</h1>
+        <h6>and</h6>
+        <h1>Thanks</h1>
+      </section>
     </section>
   </div>
 </div>
