@@ -1,0 +1,105 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Daily Stats Report?</title>
+<style>
+  .top10 {
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    float: left;
+  }
+  ol {
+    margin-bottom: 0;
+  }
+  li span {
+    margin-left: 1em;
+    color: #999;
+    float: right;
+  }
+</style>
+<script src="https://unpkg.com/dot/doT.min.js"></script>
+
+<div id="target"></div>
+
+<script type="text/template" id="tmpl">
+  <p><strong>数据新鲜度：</strong>{{=it.freshness}}</p>
+  <p><strong>欢迎萌新：</strong>{{=it.newbies.join('、')}}</p>
+  <div class="top10">
+    <strong>在线时长 TOP 10</strong>
+    <ol>
+      {{~it.timeLived.reverse() :p}}
+      <li>{{=p[0]}}<span>{{=Math.round(p[1])}} s</span></li>
+      {{~}}
+    </ol>
+  </div>
+  <div class="top10">
+    <strong>死亡次数 TOP 10</strong>
+    <ol>
+      {{~it['stat.deaths'].reverse() :p}}
+      <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
+      {{~}}
+    </ol>
+  </div>
+  <div class="top10">
+    <strong>鞘翅飞行距离 TOP 10</strong>
+    <ol>
+      {{~it.aviate.reverse() :p}}
+      <li>{{=p[0]}}<span>{{=p[1]}} cm</span></li>
+      {{~}}
+    </ol>
+  </div>
+  <div class="top10">
+    <strong>消灭蛋糕 TOP 10</strong>
+    <ol>
+      {{~it.cakeEaten.reverse() :p}}
+      <li>{{=p[0]}}<span>{{=p[1]}} 片</span></li>
+      {{~}}
+    </ol>
+  </div>
+</script>
+
+<script>
+  let json;
+
+  fetch('./stats.json')
+    .then(res => res.json())
+    .then(j => {
+      json = j;
+      console.log('Stats data has been loaded. You can now play around with `json`.');
+    })
+    .then(() => {
+      const stats = {
+        freshness: new Date(json.update).toLocaleString(),
+        newbies: [],
+        aviate: [['', 0]],
+        timeLived: [['', 0]],
+        cakeEaten: [['', 0]],
+        'stat.deaths': [['', 0]],
+      };
+      json.players.forEach(player => {
+        let name = player.data.playername;
+        let key;
+        if (player.data.time_start > (json.update - 86400000)) stats.newbies.push(name);
+        if (player.stats['stat.aviateOneCm'] > stats.aviate[0][1]) {
+          stats.aviate.push([name, player.stats['stat.aviateOneCm']]);
+          stats.aviate = stats.aviate.sort((a, b) => a[1] - b[1]).slice(-10);
+        }
+        if (player.data.time_lived > stats.timeLived[0][1]) {
+          stats.timeLived.push([name, player.data.time_lived]);
+          stats.timeLived = stats.timeLived.sort((a, b) => a[1] - b[1]).slice(-10);
+        }
+        if (player.stats['stat.cakeSlicesEaten'] > stats.cakeEaten[0][1]) {
+          stats.cakeEaten.push([name, player.stats['stat.cakeSlicesEaten']]);
+          stats.cakeEaten = stats.cakeEaten.sort((a, b) => a[1] - b[1]).slice(-10);
+        }
+        key = 'stat.deaths';
+        if (player.stats[key] > stats[key][0][1]) {
+          stats[key].push([name, player.stats[key]]);
+          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
+        }
+      });
+      const tmpl = doT.template(document.getElementById('tmpl').innerText);
+      document.getElementById('target').innerHTML = tmpl(stats);
+    });
+</script>
