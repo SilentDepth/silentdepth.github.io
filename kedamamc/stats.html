@@ -1,152 +1,170 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>Daily Stats Report?</title>
+<title>KedamaMC Player Stats TOP10s</title>
+<link rel="stylesheet" href="https://unpkg.com/normalize.css/normalize.css">
 <style>
-  .top10 {
-    margin: 10px;
-    padding: 20px;
-    border: 1px solid #999;
-    border-radius: 4px;
-    float: left;
-  }
-  ol {
-    margin-bottom: 0;
-  }
-  li span {
-    margin-left: 1em;
-    color: #999;
-    float: right;
-  }
+  html, body, #page { margin: 0; padding: 0; width: 100%; height: 100%; font-family: sans-serif; }
+  .page-header { padding: 0 40px; background: #333; color: #EEE; }
+  .page-header strong { line-height: calc(1em + 80px); font-size: 2em; }
+  .page-header span { float: right; line-height: calc(2em + 80px); }
+  .block { padding: 0 40px; }
+  .block::after { content: ''; display: block; clear: both; }
+  .newbies { border-bottom: 1px solid #ccc; }
+  .newbies .sep { color: #999; margin: 0 .5em; }
+  .top10s { margin-left: -10px; }
+  .top10 { margin: 10px; padding: 20px; border: 1px solid #999; border-radius: 4px; float: left; }
+  .top10 strong { display: block; text-align: center; }
+  ol { margin-bottom: 0; }
+  li span { margin-left: 1em; color: #999; float: right; }
+  li:nth-child(1) { color: darkorange; }
+  li:nth-child(2), li:nth-child(3) { color: darkgoldenrod; }
+  .page-footer { padding: 20px 40px; background: #EEE; color: #AAA; text-align: center; border-top: 1px solid #ccc; }
 </style>
 <script src="https://unpkg.com/es5-shim/es5-shim.min.js"></script>
 <script src="https://unpkg.com/promise-polyfill/promise.min.js"></script>
 <script src="https://unpkg.com/whatwg-fetch/fetch.js"></script>
 <script src="https://unpkg.com/dot/doT.min.js"></script>
 
-<div id="target"></div>
+<div id="page"></div>
 
 <script type="text/template" id="tmpl">
-  <p><strong>数据新鲜度：</strong>{{=it.freshness}}</p>
-  <p><strong>欢迎萌新：</strong>{{=it.newbies.join('、')}}<small style="color: #999;">（过去24小时内入服的玩家）</small></p>
-  <div class="top10">
-    <strong>在线时长 TOP 10</strong>
-    <ol>
-      {{~it.timeLived.reverse() :p}}
-      <li>{{=p[0]}}<span>{{=Math.round(p[1] / 3600 * 10) / 10}} 小时</span></li>
-      {{~}}
-    </ol>
+  <div class="page-header">
+    <strong>毛玉線圈物語玩家统计数据排行</strong>
+    <span>数据新鲜度：{{=it.freshness}}</span>
   </div>
-  <div class="top10">
-    <strong>死亡次数 TOP 10</strong>
-    <ol>
-      {{~it['stat.deaths'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
+  <div class="block newbies">
+    <p class="block-title"><strong>欢迎萌新</strong><small style="color: #999;">（过去24小时内入服的玩家）</small></p>
+    <p>
+      {{~it.newbies :name:idx}}
+      {{?idx > 0}}<span class="sep">/</span>{{?}}<code>{{=name}}</code>
       {{~}}
-    </ol>
+    </p>
   </div>
-  <div class="top10">
-    <strong>被苦力怕炸飞 TOP 10</strong>
-    <ol>
-      {{~it['stat.entityKilledBy.Creeper'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
-      {{~}}
-    </ol>
+  <div class="block top10s">
+    <div class="top10">
+      <strong>在线时长 TOP10</strong>
+      <ol>
+        {{~it.timeLived.reverse() :p}}
+        <li>{{=p[0]}}<span>{{=Math.round(p[1] / 3600 * 10) / 10}} 小时</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>死亡次数 TOP10</strong>
+      <ol>
+        {{~it['stat.deaths'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>被苦力怕炸飞 TOP10</strong>
+      <ol>
+        {{~it['stat.entityKilledBy.Creeper'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>奔跑距离 TOP10</strong>
+      <ol>
+        {{~it['stat.sprintOneCm'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=Math.round(p[1] / 100)}} 米</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>鞘翅飞行距离 TOP10</strong>
+      <ol>
+        {{~it['stat.aviateOneCm'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=Math.round(p[1] / 100)}} 米</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>乘坐矿车移动距离 TOP10</strong>
+      <ol>
+        {{~it['stat.minecartOneCm'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=Math.round(p[1] / 100)}} 米</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>骑马移动距离 TOP10</strong>
+      <ol>
+        {{~it['stat.horseOneCm'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=Math.round(p[1] / 100)}} 米</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>消灭蛋糕 TOP10</strong>
+      <ol>
+        {{~it['stat.cakeSlicesEaten'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 片</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>开采下界石英矿石 TOP10</strong>
+      <ol>
+        {{~it['stat.mineBlock.minecraft.quartz_ore'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 块</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>开采钻石矿石 TOP10</strong>
+      <ol>
+        {{~it['stat.mineBlock.minecraft.diamond_ore'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 块</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>开采铁矿石 TOP10</strong>
+      <ol>
+        {{~it['stat.mineBlock.minecraft.iron_ore'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 块</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>村民交易 TOP10</strong>
+      <ol>
+        {{~it['stat.tradedWithVillager'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>怪物击杀 TOP10</strong>
+      <ol>
+        {{~it['stat.mobKills'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 只</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>玩家击杀 TOP10</strong>
+      <ol>
+        {{~it['stat.playerKills'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 人</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>觉不能停 TOP10</strong>
+      <ol>
+        {{~it['stat.sleepInBed'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
+        {{~}}
+      </ol>
+    </div>
   </div>
-  <div class="top10">
-    <strong>奔跑距离 TOP 10</strong>
-    <ol>
-      {{~it['stat.sprintOneCm'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=Math.round(p[1] / 100)}} 米</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>鞘翅飞行距离 TOP 10</strong>
-    <ol>
-      {{~it.aviate.reverse() :p}}
-      <li>{{=p[0]}}<span>{{=Math.round(p[1] / 100)}} 米</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>乘坐矿车移动距离 TOP 10</strong>
-    <ol>
-      {{~it['stat.minecartOneCm'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=Math.round(p[1] / 100)}} 米</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>骑马移动距离 TOP 10</strong>
-    <ol>
-      {{~it['stat.horseOneCm'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=Math.round(p[1] / 100)}} 米</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>消灭蛋糕 TOP 10</strong>
-    <ol>
-      {{~it.cakeEaten.reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 片</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>开采下界石英矿石 TOP 10</strong>
-    <ol>
-      {{~it['stat.mineBlock.minecraft.quartz_ore'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 块</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>开采钻石矿石 TOP 10</strong>
-    <ol>
-      {{~it['stat.mineBlock.minecraft.diamond_ore'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 块</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>开采铁矿石 TOP 10</strong>
-    <ol>
-      {{~it['stat.mineBlock.minecraft.iron_ore'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 块</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>村民交易 TOP 10</strong>
-    <ol>
-      {{~it['stat.tradedWithVillager'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>怪物击杀 TOP 10</strong>
-    <ol>
-      {{~it['stat.mobKills'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 只</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>玩家击杀 TOP 10</strong>
-    <ol>
-      {{~it['stat.playerKills'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 人</span></li>
-      {{~}}
-    </ol>
-  </div>
-  <div class="top10">
-    <strong>觉不能停 TOP 10</strong>
-    <ol>
-      {{~it['stat.sleepInBed'].reverse() :p}}
-      <li>{{=p[0]}}<span>{{=p[1]}} 次</span></li>
-      {{~}}
-    </ol>
+  <div class="page-footer">
+    <p>by SilentDepth with ❤</p>
+    <p><small>* 打开 JavaScript 控制台有惊喜</small></p>
   </div>
 </script>
 
@@ -163,105 +181,49 @@
       var stats = {
         freshness: new Date(json.update).toLocaleString(),
         newbies: [],
-        aviate: [['', 0]],
-        timeLived: [['', 0]],
-        cakeEaten: [['', 0]],
-        'stat.deaths': [['', 0]],
-        'stat.mineBlock.minecraft.quartz_ore': [['', 0]],
-        'stat.playerKills': [['', 0]],
-        'stat.mineBlock.minecraft.diamond_ore': [['', 0]],
-        'stat.minecartOneCm': [['', 0]],
-        'stat.sprintOneCm': [['', 0]],
-        'stat.mineBlock.minecraft.iron_ore': [['', 0]],
-        'stat.entityKilledBy.Creeper': [['', 0]],
-        'stat.mobKills': [['', 0]],
-        'stat.tradedWithVillager': [['', 0]],
-        'stat.sleepInBed': [['', 0]],
-        'stat.horseOneCm': [['', 0]],
+        timeLived: [['', 0]]
       };
+
+      function simpleRank(player, key) {
+        if (stats[key] === undefined) stats[key] = [['', 0]];
+        if (player.stats[key] > stats[key][0][1]) {
+          stats[key].push([player.data.playername, player.stats[key]]);
+          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
+        }
+      }
+
       json.players.forEach(function (player) {
         if (player.data.banned) return;
         var name = player.data.playername;
         var key;
         if (player.data.time_start > (json.update - 86400000)) stats.newbies.push(name);
-        if (player.stats['stat.aviateOneCm'] > stats.aviate[0][1]) {
-          stats.aviate.push([name, player.stats['stat.aviateOneCm']]);
-          stats.aviate = stats.aviate.sort((a, b) => a[1] - b[1]).slice(-10);
-        }
         if (player.data.time_lived > stats.timeLived[0][1]) {
           stats.timeLived.push([name, player.data.time_lived]);
           stats.timeLived = stats.timeLived.sort((a, b) => a[1] - b[1]).slice(-10);
         }
-        if (player.stats['stat.cakeSlicesEaten'] > stats.cakeEaten[0][1]) {
-          stats.cakeEaten.push([name, player.stats['stat.cakeSlicesEaten']]);
-          stats.cakeEaten = stats.cakeEaten.sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.deaths';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.mineBlock.minecraft.quartz_ore';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.playerKills';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.mineBlock.minecraft.diamond_ore';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.minecartOneCm';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.sprintOneCm';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.mineBlock.minecraft.iron_ore';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.entityKilledBy.Creeper';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.mobKills';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.tradedWithVillager';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.sleepInBed';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
-        key = 'stat.horseOneCm';
-        if (player.stats[key] > stats[key][0][1]) {
-          stats[key].push([name, player.stats[key]]);
-          stats[key] = stats[key].sort((a, b) => a[1] - b[1]).slice(-10);
-        }
+        simpleRank(player, 'stat.aviateOneCm');
+        simpleRank(player, 'stat.cakeSlicesEaten');
+        simpleRank(player, 'stat.deaths');
+        simpleRank(player, 'stat.mineBlock.minecraft.quartz_ore');
+        simpleRank(player, 'stat.playerKills');
+        simpleRank(player, 'stat.mineBlock.minecraft.diamond_ore');
+        simpleRank(player, 'stat.minecartOneCm');
+        simpleRank(player, 'stat.sprintOneCm');
+        simpleRank(player, 'stat.mineBlock.minecraft.iron_ore');
+        simpleRank(player, 'stat.entityKilledBy.Creeper');
+        simpleRank(player, 'stat.mobKills');
+        simpleRank(player, 'stat.tradedWithVillager');
+        simpleRank(player, 'stat.sleepInBed');
+        simpleRank(player, 'stat.horseOneCm');
       });
-      var tmpl = doT.template(document.getElementById('tmpl').innerText);
-      document.getElementById('target').innerHTML = tmpl(stats);
+
+      return stats;
+    })
+    .then(function (it) {
+      document.getElementById('page').innerHTML = doT.template(document.getElementById('tmpl').innerText)(it);
     });
 </script>
-
+<!--
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -271,3 +233,4 @@
   ga('create', 'UA-82103573-1', 'auto');
   ga('send', 'pageview');
 </script>
+-->
