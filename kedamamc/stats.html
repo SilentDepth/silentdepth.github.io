@@ -1,5 +1,6 @@
 <!doctype html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>KedamaMC Player Stats TOP10s</title>
 <link rel="stylesheet" href="https://unpkg.com/normalize.css/normalize.css">
 <style>
@@ -47,7 +48,7 @@
       <strong>在线时长 TOP10</strong>
       <ol>
         {{~it.timeLived.reverse() :p}}
-        <li>{{=p[0]}}<span>{{=Math.round(p[1] / 3600 * 10) / 10}} 小时</span></li>
+        <li>{{=p[0]}}<span>{{=Math.round(p[1] / 3600)}} 小时</span></li>
         {{~}}
       </ol>
     </div>
@@ -127,6 +128,14 @@
       <strong>开采铁矿石 TOP10</strong>
       <ol>
         {{~it['stat.mineBlock.minecraft.iron_ore'].reverse() :p}}
+        <li>{{=p[0]}}<span>{{=p[1]}} 块</span></li>
+        {{~}}
+      </ol>
+    </div>
+    <div class="top10">
+      <strong>开采石头 TOP10</strong>
+      <ol>
+        {{~it['stat.mineBlock.minecraft.stone'].reverse() :p}}
         <li>{{=p[0]}}<span>{{=p[1]}} 块</span></li>
         {{~}}
       </ol>
@@ -217,6 +226,7 @@
         simpleRank(player, 'stat.tradedWithVillager');
         simpleRank(player, 'stat.sleepInBed');
         simpleRank(player, 'stat.horseOneCm');
+        simpleRank(player, 'stat.mineBlock.minecraft.stone');
       });
 
       return stats;
