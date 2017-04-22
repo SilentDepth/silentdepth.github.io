@@ -1,0 +1,70 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>KedamaMC Player Stats TOP10s</title>
+<link rel="stylesheet" href="https://unpkg.com/normalize.css/normalize.css">
+<link rel="stylesheet" href="./style.css">
+<script src="https://unpkg.com/promise-polyfill/promise.min.js"></script>
+<script src="https://unpkg.com/whatwg-fetch/fetch.js"></script>
+<script src="https://unpkg.com/dot/doT.min.js"></script>
+
+<div id="page">读取数据中...</div>
+
+<script type="text/template" id="tmpl">
+  <header>
+    <div class="block">
+      <strong><a href="https://craft.moe/">毛玉線圈物語</a>玩家统计数据排行</strong>
+      <span>数据新鲜度：{{=it.update}}</span>
+    </div>
+  </header>
+  <div class="newbies">
+    <div class="block">
+      <strong>欢迎萌新</strong><span>过去24小时内入服的玩家</span>
+      <ul>
+        {{~it.newbies :name}}
+        <li><code>{{=name}}</code></li>
+        {{~}}
+      </ul>
+    </div>
+  </div>
+  <div class="ranks">
+    <div class="block">
+      {{~it.ranks :rank}}
+      <div class="rank">
+        <strong>{{=rank.title}}</strong>
+        <ol>
+          {{~rank.players :p}}
+          <li><code>{{=p[0]}}</code><span>{{=p[1]}} {{=rank.unit}}</span></li>
+          {{~}}
+        </ol>
+      </div>
+      {{~}}
+    </div>
+  </div>
+  <footer>
+    <div class="block">
+      <p>Made by SilentDepth with ❤</p>
+    </div>
+  </footer>
+</script>
+
+<script>
+  fetch('./ranks.json').then(function (res) {
+    return res.json();
+  }).then(function (json) {
+    document.getElementById('page').innerHTML = doT.template(document.getElementById('tmpl').innerText)(json);
+  });
+
+  var json;
+  function getFullData() {
+    console.log('Fetching full data...');
+    fetch('./data.json').then(function (res) {
+      return res.json();
+    }).then(function (j) {
+      json = j;
+      console.log('You can now play around with `json`.');
+    });
+  }
+
+  console.log('`getFullData()` to fetch full data.');
+</script>
