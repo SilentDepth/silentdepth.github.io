@@ -172,6 +172,11 @@ footer {
   color: #333;
 }
 
+.newbies p {
+  margin-bottom: 0;
+  font-size: small;
+}
+
 .ranks {
 }
 
