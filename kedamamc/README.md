@@ -1,3 +1,3 @@
 # kedamamc-stats-analyzer
 
-[Unoff] KedamaMC player stat data analyzer
+[Unoff] KedamaMC player stats data analyzer
