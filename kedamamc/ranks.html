@@ -48,6 +48,9 @@
   </div>
   <footer>
     <div class="block">
+      {{?it.missingCount}}
+      <p>本次有 {{=it.missingCount}} 名玩家的数据被吃掉了 >w<</p>
+      {{?}}
       <p>Made by SilentDepth with ❤</p>
     </div>
   </footer>
