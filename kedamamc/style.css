@@ -249,6 +249,13 @@ footer {
   line-height: 1.4rem;
   color: #AAA;
   font-size: small;
+  transition: .1s linear;
+  transition-property: background, box-shadow;
+}
+
+.ranks li:hover {
+  background: #FFF;
+  box-shadow: 0 0 3px #CCC;
 }
 
 .ranks code {
