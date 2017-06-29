@@ -1,0 +1,84 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+  #chart { width: 100%; height: 100%; }
+</style>
+<script src="https://unpkg.com/echarts@3.6.2/dist/echarts.min.js"></script>
+
+<div id="chart"></div>
+
+<script>
+  const HALF_YEAR = 1000 * 60 * 60 * 24 * 183;
+  let chart = echarts.init(document.getElementById('chart'));
+
+  fetch('data/latest.json').then(r => r.json()).then(json => {
+    chart.setOption({
+      toolbox: {
+        show: true,
+        feature : {
+            mark : {show: true},
+            dataZoom : {show: true},
+            saveAsImage : {show: true}
+        }
+      },
+      xAxis: {
+        name: '入服时间',
+        type: 'time',
+        splitLine: false
+      },
+      yAxis: {
+        name: '在线时间',
+        type: 'log',
+        axisLabel: {
+          formatter: function (val) {
+            return val >= 60
+              ? Math.round(val / 60) + ' h'
+              : val + ' m';
+          }
+        },
+        axisPointer: {
+          label: {
+            formatter: function (params) {
+              let val = params.value;
+              return val >= 60
+                ? Math.round(val / 60) + ' h'
+                : Math.round(val) + ' m';
+            }
+          }
+        }
+      },
+      axisPointer: {
+        show: true,
+        triggerTooltip: false
+      },
+      series: {
+        type: 'scatter',
+        data: json.players.map(p => [p.data.time_start, p.data.time_lived / 60]),
+        symbolSize: 4,
+        itemStyle: {
+          normal: {
+            color: function (obj) {
+              let p = json.players[obj.dataIndex];
+              if (p.data.banned) {
+                return '#000';
+              } else {
+                let alpha = .2 + .8 * (HALF_YEAR - (Date.now() - Math.max(Date.now() - HALF_YEAR, p.data.time_last))) / HALF_YEAR;
+                return 'rgba(255,0,0,' + alpha + ')';
+              }
+            }
+          }
+        },
+        tooltip: {
+          formatter: function (params) {
+            let p = json.players[params.dataIndex];
+            return p.data.playername + '<br>BANNED: ' + p.data.banned + '<br>入服时间: ' + new Date(p.data.time_start);
+          }
+        }
+      },
+      tooltip: {
+        trigger: 'item'
+      }
+    });
+  });
+</script>
