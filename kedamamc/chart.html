@@ -30,6 +30,7 @@
       yAxis: {
         name: '在线时间',
         type: 'log',
+        logBase: 8,
         axisLabel: {
           formatter: function (val) {
             return val >= 60
@@ -50,6 +51,7 @@
       },
       axisPointer: {
         show: true,
+        snap: true,
         triggerTooltip: false
       },
       series: {
