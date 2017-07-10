@@ -28,6 +28,16 @@
       </ul>
       <p>共 {{=it.playerCount}} 名有效玩家中，有 {{=it.yesterdayCount}} 名昨天登录过</p>
     </div>
+    {{?it.birthdays.length}}
+    <div class="block">
+      <strong>生日快乐</strong><span>N 年前的今天，你们来到了毛线</span>
+      <ul>
+        {{~it.birthdays :name}}
+        <li><code>{{=name}}</code></li>
+        {{~}}
+      </ul>
+    </div>
+    {{?}}
   </div>
   <div class="ranks">
     <div class="block">
