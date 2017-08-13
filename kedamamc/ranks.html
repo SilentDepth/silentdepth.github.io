@@ -20,13 +20,13 @@
   </header>
   <div class="newbies">
     <div class="block">
-      <strong>欢迎萌新</strong><span>过去24小时内入服的玩家</span>
+      <strong>欢迎萌新</strong><span>昨日入服的玩家（0点之后入服的于次日显示）</span>
       <ul>
         {{~it.newbies :name}}
         <li><code>{{=name}}</code></li>
         {{~}}
       </ul>
-      <p>共 {{=it.playerCount}} 名有效玩家中，有 {{=it.yesterdayCount}} 名昨天登录过</p>
+      <p>共 {{=it.playerCount}} 名有效玩家中，有 {{=it.yesterdayCount}} 名在过去24小时内登录过</p>
     </div>
     {{?it.birthdays.length}}
     <div class="block">
