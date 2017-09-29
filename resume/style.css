@@ -1,0 +1,40 @@
+html, body {width: 100%; height: 100%; margin: 0; padding: 0; background: #eee;}
+/* Uniform */
+h1, h2, h3, p, dd, th, td {font-weight: 300;}
+h1, h2, h3, h4 {line-height: 1; margin: 0; padding: 0;}
+.code {font-family: 'Source Code Pro', 'Consolas', 'Menlo', monospace;}
+.remark {color: #aaa;}
+
+#paper {box-sizing: border-box; width: 210mm; padding: 10mm; margin: 30px auto 0; background: #fff; box-shadow: 0 8px 22px #bbb; font-size: 12pt; font-family: 'PingFang SC', 'Microsoft YaHei Light', 'Segoe UI Light', sans-serif;}
+#paper:after {content: ''; display: block; clear: both;}
+#paper > .left {width: 66%; float: left;}
+#paper > .right {width: 33%; float: right;}
+
+header {text-align: right; margin-bottom: 1em;}
+header h1 {font-size: 2em;}
+header h2 {font-size: 1.2em; margin-top: 0.5em;}
+
+section {box-sizing: border-box; color: #333;}
+section h3 {border-left: 0.25em solid #8f43e8; color: #8f43e8; padding-left: 0.75em; line-height: 1; font-size: 1em; margin: 2em 0 1em;}
+section:first-child h3 {margin-top: 0;}
+section h4 {padding-left: 1em; font-size: 1em; font-weight: normal; font-style: oblique; color: #000;}
+section p {padding-left: 1em; text-align: justify;}
+
+.left dt {font-weight: bold; color: #999; border-left: 0.25em solid #aaa; padding-left: 0.75em; margin: 1em 0 0.5em; line-height: 1;}
+.left dd {margin-left: 1em;}
+.left dd em {font-style: normal; color: #000;}
+
+section#basicinfo {margin: 0; text-align: right; font-size: 0.8em; color: #000;}
+section#basicinfo dl {margin: 0;}
+section#basicinfo dt, section#basicinfo caption {color: #757575;}
+section#basicinfo dd {margin-bottom: 1em;}
+section#basicinfo table {border-collapse: collapse; margin: 0 0 0 auto; position: relative; right: -0.5em;}
+section#basicinfo caption {border-bottom: 1px solid #757575; text-align: right; padding-right: 0.5em;}
+section#basicinfo tbody + tbody {border-top: 1px solid #ccc;}
+section#basicinfo tbody tr:hover {background: #eee;}
+section#basicinfo tbody tr.practiced {color: #666;}
+section#basicinfo tbody tr.learning {color: #888;}
+section#basicinfo th, section#basicinfo td {padding: 0.1em 0.5em;}
+section#basicinfo td {padding-left: 0;}
+section#basicinfo th {text-align: left;}
+section#basicinfo td {text-align: right;}
