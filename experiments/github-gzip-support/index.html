@@ -1,0 +1,12 @@
+<!doctype html>
+
+<h1>Will Pre-Gzipped File Functions Normally?</h1>
+<h2 id="result">Checking</h2>
+
+<script>
+  fetch('./data.json').then(s => s.json()).then(json => {
+    document.getElementById('result').innerText = `Yes! (Got update: ${new Date(json._update)})`
+  }).catch(reason => {
+    docuemnt.getElementById('result').innerText = `No! (Got error: ${reason})`
+  })
+</script>
